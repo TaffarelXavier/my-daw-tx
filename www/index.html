@@ -19,26 +19,25 @@
                     <h1>My Daw TX</h1>
                 </div>
             </div>
-            <div v-for="faixa in faixas" class="faixa">
-                <img :src="'img/' + faixa.icon" class="icone" />
-                <strong>{{ faixa.nome }}</strong>
+            <audio controls @timeupdate="updateTime">
+                <source src="audio_example/audio_example-bass.mp3" type="audio/mp3">
+                Seu navegador não suporta a tag de áudio.
+            </audio>
+            <audio controls @timeupdate="updateTime">
+                <source src="audio_example/audio_example-drums.mp3" type="audio/mp3">
+                Seu navegador não suporta a tag de áudio.
+            </audio>
+            <audio controls @timeupdate="updateTime">
+                <source src="audio_example/audio_example-other.mp3" type="audio/mp3">
+                Seu navegador não suporta a tag de áudio.
+            </audio>
+            <audio controls @timeupdate="updateTime">
+                <source src="audio_example/audio_example-vocals.mp3" type="audio/mp3">
+                Seu navegador não suporta a tag de áudio.
+            </audio>
 
-                <input type="range" @input="alterarVolume" class="input-range" :id="faixa.id" min="0" max="1"
-                    step="0.01" :value="faixa.volume" />
 
-                <i class="bi bi-volume-up" :id="'muteButton' + faixa.id" @click="mudo" :data-id="faixa.id"></i>
-
-                <audio :muted="faixa.muted" :key="faixa.id" ref="audioPlayers" :id="'audio' + faixa.id"
-                    :data-id="faixa.id" :data-color="faixa.color" @timeupdate="updateTime">
-                    <source :src="faixa.src" type="audio/mpeg">
-                </audio>
-
-                <!-- <audio constrols autoplay :key="faixa.id" ref="audioPlayers" :src="faixa.src"
-                        @loadedmetadata="onAudioLoaded"></audio> -->
-                <!-- @timeupdate="updateTime" -->
-                <canvas :id="'canvas' + faixa.id"></canvas>
-            </div><br />
-
+            <!-- VOLUME GERAL -->
             <div style="margin-top: 50px;">
                 <!-- VOLUME GERAL -->
                 <div class="d-flex align-items-center mb-5">
@@ -57,7 +56,7 @@
                 </div>
             </div>
 
-            <!-- PLAY E MUTE -->
+
             <div class="text-center w-100 pb-4" style="position:fixed; bottom:0px;left:0px;">
                 <div class="btn-group btn-group-lg" role="group" aria-label="Basic mixed styles example">
                     <button type="button" class="btn btn-danger bg-play" id="btnPlay" @click="play"><i
@@ -69,9 +68,141 @@
             </div>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="js/script.js"></script>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                volumeGeral: 0.5,
+                audioPlayers: [],
+                duration: 0,
+                currentTime: 0,
+                faixas: [
+                    {
+                        id: 1,
+                        nome: "Baixo",
+                        src: "audio_example/audio_example-bass.mp3"
+                    },
+                    {
+                        id: 2,
+                        nome: "Bateria",
+                        src: "audio_example/audio_example-drums.mp3"
+                    },
+                    {
+                        id: 3,
+                        nome: "Outros",
+                        src: "audio_example/audio_example-other.mp3"
+                    },
+                    {
+                        id: 4,
+                        nome: "Vocais",
+                        src: "audio_example/audio_example-vocals.mp3"
+                    }
+                ],
+                audioPlayers: [],
+                duration: 0,
+                currentTime: 0
+            },
+            mounted() {
+                this.audioPlayers = this.$refs.audioPlayers;
+            },
+            methods: {
+                onAudioLoaded() {
+                    this.duration = Math.floor(this.audioPlayers[0].duration);
+                },
+                onTimeInput() {
+                    for (let i = 0; i < this.audioPlayers.length; i++) {
+                        const audio = this.audioPlayers[i];
+                        audio.currentTime = this.currentTime;
+                        if (audio.paused) {
+                            audio.play();
+                        }
+                    }
+                },
+                setTime(time) {
+                    var audioTags = document.getElementsByTagName("audio");
+                    var audioArray = Array.from(audioTags);
+                    audioArray.forEach(function (audio) {
+                        audio.currentTime = time;
+                    });
+                },
+                alterarVolumeGeral(ev) {
+                    const $this = ev.target;
+                    const vol = $this.value;
+                    var audioTags = document.getElementsByTagName("audio");
+                    var audioArray = Array.from(audioTags);
+                    audioArray.forEach(function (audio) {
+                        audio.volume = vol;
+                    });
+
+                    this.faixas.forEach(function (faixa) {
+                        faixa.volume = vol;
+                    })
+                },
+                play(ev) {
+                    const me = this;
+                    var audioTags = document.getElementsByTagName("audio");
+                    var audioArray = Array.from(audioTags);
+                    let duration = 0;
+                    audioArray.forEach(function (audio) {
+                        duration = audio.duration;
+                        if (audio.paused) {
+                            audio.play();
+                            $('#btnPlay').html('<i class="bi bi-pause-circle-fill"></i>');
+                        } else {
+                            audio.pause();
+                            isPlaying = false;
+                            $('#btnPlay').html('<i class="bi bi-play-circle-fill"></i>');
+                        }
+                        audio.volume = me.volumeGeral;
+                    });
+
+                    me.duration = duration;
+                },
+                setMuteGeneral() {
+                    var audioTags = document.getElementsByTagName("audio");
+                    var audioArray = Array.from(audioTags);
+                    audioArray.forEach(function (audio) {
+                        audio.muted = !audio.muted;
+                        if (audio.muted) {
+                            $('#btnMuteGeneral').html('<i class="bi bi-volume-mute"></i>');
+                        } else {
+                            $('#btnMuteGeneral').html('<i class="bi bi-volume-up"></i>');
+                        }
+                    });
+                },
+                formatCurrentTime(cTime) {
+                    let minutes = Math.floor(cTime / 60);
+                    let seconds = Math.floor(cTime % 60);
+                    minutes = (minutes >= 10) ? minutes : "0" + minutes;
+                    seconds = (seconds >= 10) ? seconds : "0" + seconds;
+                    return minutes + ":" + seconds;
+                },
+                atualizarTempoGeral(ev) {
+                    const $this = ev.target;
+                    let thisDuration = $this.value;
+                    var audioTags = document.getElementsByTagName("audio");
+                    var audioArray = Array.from(audioTags);
+
+                    audioArray.forEach(function (audio) {
+                        audio.pause();
+                        audio.currentTime = thisDuration;
+                        setInterval(() => {
+                            audio.play();
+                        }, 100);
+                    });
+                },
+                updateTime(ev) {
+                    const $this = ev.target;
+                    this.currentTime = $this.currentTime;
+                },
+            }
+        });
+
+    </script>
 </body>
 
 </html>
