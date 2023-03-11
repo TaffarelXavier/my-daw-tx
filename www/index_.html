@@ -33,12 +33,24 @@
 
 
         <!-- VOLUME GERAL -->
-        <div class="d-flex align-items-center mb-5">
-            <i class="bi bi-volume-down"></i>
-            <input type="range" @input="alterarVolumeGeral" class="w-100 input-range" v-model="volumeGeral" min="0"
-                max="1" step="0.01" value="0.2" />
-            <i class="bi bi-volume-up"></i>
+        <div style="margin-top: 50px;">
+            <!-- VOLUME GERAL -->
+            <div class="d-flex align-items-center mb-5">
+                <i class="bi bi-volume-down"></i>
+                <input type="range" @input="alterarVolumeGeral" class="w-100 input-range" v-model="volumeGeral" min="0"
+                    max="1" step="0.01" value="0.2" />
+                <i class="bi bi-volume-up"></i>
+            </div>
+
+            <!-- TEMPO -->
+            <div class="d-flex align-items-center mb-5">
+                {{ formatCurrentTime(currentTime) }}<input type="range" min="0" :max="duration"
+                    @input="atualizarTempoGeral" v-model="currentTime"
+                    class="w-100 input-range">{{formatCurrentTime(Math.floor(duration))
+                }}
+            </div>
         </div>
+
 
         <div class="text-center w-100 pb-4" style="position:fixed; bottom:0px;left:0px;">
             <div class="btn-group btn-group-lg" role="group" aria-label="Basic mixed styles example">
@@ -155,6 +167,26 @@
                             $('#btnMuteGeneral').html('<i class="bi bi-volume-up"></i>');
                         }
                     });
+                },
+                formatCurrentTime(cTime) {
+                    let minutes = Math.floor(cTime / 60);
+                    let seconds = Math.floor(cTime % 60);
+                    minutes = (minutes >= 10) ? minutes : "0" + minutes;
+                    seconds = (seconds >= 10) ? seconds : "0" + seconds;
+                    return minutes + ":" + seconds;
+                },
+                atualizarTempoGeral(ev) {
+                    // const $this = ev.target;
+                    // let thisDuration = $this.value;
+                    // var audioTags = document.getElementsByTagName("audio");
+                    // var audioArray = Array.from(audioTags);
+                    // audioArray.forEach(function (audio) {
+                    //     audio.pause();
+                    //     audio.currentTime = thisDuration;
+                    //     // setInterval(() => {
+                    //     //     audio.play();
+                    //     // }, 100);
+                    // });
                 },
             }
         });
