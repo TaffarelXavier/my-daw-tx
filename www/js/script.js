@@ -130,7 +130,6 @@ var app = new Vue({
             const vol = $this.value;
             const audio1 = document.getElementById("audio" + $this.id);
             audio1.volume = vol;
-
             this.faixas.find(function (faixa) {
                 if (faixa.id == $this.id) {
                     faixa.volume = vol;
@@ -141,7 +140,6 @@ var app = new Vue({
             const me = this;
             var audioTags = document.getElementsByTagName("audio");
             var audioArray = Array.from(audioTags);
-            let isPlaying = false;
             let duration = 0;
             audioArray.forEach(function (audio) {
                 duration = audio.duration;

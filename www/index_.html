@@ -1,35 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
     <div id="app">
-        <template>
-            <div v-for="faixa in faixas" style="border:2px solid red">
-                <audio constrols autoplay :key="faixa.id" ref="audioPlayers" :src="faixa.src"
-                    @loadedmetadata="onAudioLoaded"></audio>
+        <!-- <template> -->
+        <audio controls>
+            <source src="audio_example/audio_example-bass.mp3" type="audio/mp3">
+            Seu navegador não suporta a tag de áudio.
+        </audio>
+        <audio controls>
+            <source src="audio_example/audio_example-drums.mp3" type="audio/mp3">
+            Seu navegador não suporta a tag de áudio.
+        </audio>
+        <audio controls>
+            <source src="audio_example/audio_example-other.mp3" type="audio/mp3">
+            Seu navegador não suporta a tag de áudio.
+        </audio>
+        <audio controls>
+            <source src="audio_example/audio_example-vocals.mp3" type="audio/mp3">
+            Seu navegador não suporta a tag de áudio.
+        </audio>
+        <!-- </template> -->
+        <div class="text-center w-100 pb-4" style="position:fixed; bottom:0px;left:0px;">
+            <div class="btn-group btn-group-lg" role="group" aria-label="Basic mixed styles example">
+                <button type="button" class="btn btn-danger bg-play" id="btnPlay" @click="play"><i
+                        class="bi bi-play-circle-fill"></i></button>
+                <button type="button" class="btn btn-secondary" id="btnMuteGeneral" @click="setMuteGeneral">
+                    <i class="bi bi-volume-up"></i>
+                </button>
             </div>
-            <input type="range" v-model="currentTime" v-bind:max="duration" @input="onTimeInput">
-            <button @click="setTime(10)">AA</button>
-            <button @click="setTime(100)">BB</button>
-            <button @click="setTime(200)">CC</button>
-        </template>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
         var app = new Vue({
             el: '#app',
             data: {
+                volumeGeral: 0.5,
+                audioPlayers: [],
+                duration: 0,
+                currentTime: 0,
                 faixas: [
                     {
                         id: 1,
@@ -78,7 +101,39 @@
                     audioArray.forEach(function (audio) {
                         audio.currentTime = time;
                     });
-                }
+                },
+                play(ev) {
+                    const me = this;
+                    var audioTags = document.getElementsByTagName("audio");
+                    var audioArray = Array.from(audioTags);
+                    let duration = 0;
+                    audioArray.forEach(function (audio) {
+                        duration = audio.duration;
+                        if (audio.paused) {
+                            audio.play();
+                            $('#btnPlay').html('<i class="bi bi-pause-circle-fill"></i>');
+                        } else {
+                            audio.pause();
+                            isPlaying = false;
+                            $('#btnPlay').html('<i class="bi bi-play-circle-fill"></i>');
+                        }
+                        audio.volume = me.volumeGeral;
+                    });
+
+                    me.duration = duration;
+                },
+                setMuteGeneral() {
+                    var audioTags = document.getElementsByTagName("audio");
+                    var audioArray = Array.from(audioTags);
+                    audioArray.forEach(function (audio) {
+                        audio.muted = !audio.muted;
+                        if (audio.muted) {
+                            $('#btnMuteGeneral').html('<i class="bi bi-volume-mute"></i>');
+                        } else {
+                            $('#btnMuteGeneral').html('<i class="bi bi-volume-up"></i>');
+                        }
+                    });
+                },
             }
         });
 
