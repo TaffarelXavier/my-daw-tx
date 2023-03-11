@@ -1,0 +1,95 @@
+ body {
+     padding: 0px !important;
+     margin: 0px !important;
+     background: #000;
+     color: #fff;
+     font-family: 'Roboto', sans-serif;
+ }
+
+ img {
+     width: 30px;
+     height: 30px;
+ }
+
+ p {
+     padding: 0;
+     margin: 0;
+ }
+
+ audio {
+     display: flex;
+     width: 100%;
+ }
+
+ canvas {
+     position: absolute;
+     height: 100%;
+     z-index: -1;
+     width: 100%;
+ }
+
+ .faixa {
+     padding-top: 20px;
+     padding-bottom: 20px;
+     display: flex;
+     justify-content: space-evenly;
+     align-items: center;
+     position: relative;
+     background: transparent !important;
+     color: #fff;
+ }
+
+ .faixa~input[type=range] {
+     width: 100%;
+     height: 5px;
+ }
+
+ .faixa input[type=range] {
+     width: 40%;
+     height: 5px;
+ }
+
+ .input-range {
+     appearance: none !important;
+     background-color: #ddd !important;
+     border-radius: 5px !important;
+     outline: none !important;
+     appearance: none !important;
+     height: 1px !important;
+     background-color: #666 !important;
+     cursor: pointer !important;
+ }
+
+ .input-range::-webkit-slider-thumb {
+     appearance: none !important;
+     width: 30px !important;
+     height: 30px !important;
+     background-color: rgb(63, 0, 0);
+     border-radius: 50% !important;
+     cursor: pointer !important;
+ }
+
+ .input-range::-moz-range-thumb {
+     appearance: none !important;
+     width: 20px !important;
+     height: 20px !important;
+     background-color: #666 !important;
+     border-radius: 50% !important;
+     cursor: pointer !important;
+ }
+
+ .btn-mute {
+     float: right;
+ }
+
+ .icone {
+     width: 30px;
+     height: 30px;
+     float: left;
+ }
+
+ .bg-play {
+     background-color: rgb(63, 0, 0) !important;
+     outline: 0 !important;
+     bottom: 0 !important;
+ }

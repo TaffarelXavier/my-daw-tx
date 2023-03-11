@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="19.581825mm"
+   height="19.581825mm"
+   viewBox="0 0 19.581825 19.581825"
+   version="1.1"
+   id="svg91"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
+   sodipodi:docname="synth.svg">
+  <defs id="defs85" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-120.93808,-186.66615)">
+    <path
+       inkscape:connector-curvature="0"
+       id="path944-3-7"
+       style="fill:#fff;fill-opacity:1;fill-rule:nonzero;stroke:#fff;stroke-width:0.01019625;stroke-opacity:1"
+       d="m 139.6275,203.15428 c 0,0.2128 -0.17334,0.38583 -0.38542,0.38583 h -17.12972 c -0.2131,0 -0.38644,-0.17303 -0.38644,-0.38583 v -2.94345 h 1.31735 v 2.43906 h 0.79226 v -2.43906 h 1.62019 v 2.43906 h 0.79225 v -2.43906 h 1.62018 v 2.43906 h 0.79224 v -2.43906 h 1.62021 v 2.43906 h 0.79223 v -2.43906 h 1.62019 v 2.43906 h 0.79226 v -2.43906 h 1.62018 v 2.43906 h 0.79225 v -2.43906 h 1.62018 v 2.43906 h 0.79226 v -2.43906 h 1.31735 z m -0.38542,-7.4138 h -17.12972 c -0.62808,0 -1.13892,0.51063 -1.13892,1.13831 v 6.27549 c 0,0.62758 0.51084,1.13822 1.13892,1.13822 h 17.12972 c 0.62707,0 1.1379,-0.51064 1.1379,-1.13822 v -6.27549 c 0,-0.62768 -0.51083,-1.13831 -1.1379,-1.13831" />
+  </g>
+</svg>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>html5boilerplate Bootstrap com Vue</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="container-fluid mt-5">
+        <div id="app">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1>My Daw TX</h1>
+                </div>
+            </div>
+            <template>
+                <div v-for="faixa in faixas" class="faixa">
+                    <img :src="'img/' + faixa.icon" class="icone" />
+                    <strong>{{ faixa.nome }}</strong>
+
+                    <input type="range" @input="alterarVolume" class="input-range" :id="faixa.id" min="0" max="1"
+                        step="0.01" :value="faixa.volume" />
+
+                    <i class="bi bi-volume-up" :id="'muteButton' + faixa.id" @click="mudo" :data-id="faixa.id"></i>
+
+                    <audio :muted="faixa.muted" :key="faixa.id" ref="audioPlayers" :id="'audio' + faixa.id"
+                        :data-id="faixa.id" :data-color="faixa.color" @timeupdate="updateTime">
+                        <source :src="faixa.src" type="audio/mpeg">
+                    </audio>
+
+                    <!-- <audio constrols autoplay :key="faixa.id" ref="audioPlayers" :src="faixa.src"
+                        @loadedmetadata="onAudioLoaded"></audio> -->
+                    <!-- @timeupdate="updateTime" -->
+                    <canvas :id="'canvas' + faixa.id"></canvas>
+                </div><br />
+
+                <div style="margin-top: 50px;">
+                    <!-- VOLUME GERAL -->
+                    <div class="d-flex align-items-center mb-5">
+                        <i class="bi bi-volume-down"></i>
+                        <input type="range" @input="alterarVolumeGeral" class="w-100 input-range" v-model="volumeGeral"
+                            min="0" max="1" step="0.01" value="0.2" />
+                        <i class="bi bi-volume-up"></i>
+                    </div>
+
+                    <!-- TEMPO -->
+                    <div class="d-flex align-items-center mb-5">
+                        {{ formatCurrentTime(currentTime) }}<input type="range" min="0" :max="duration"
+                            @input="atualizarTempoGeral" v-model="currentTime"
+                            class="w-100 input-range">{{formatCurrentTime(Math.floor(duration))
+                        }}
+                    </div>
+                </div>
+
+                <!-- PLAY E MUTE -->
+                <div class="text-center w-100 pb-4" style="position:fixed; bottom:0px;left:0px;">
+                    <div class="btn-group btn-group-lg" role="group" aria-label="Basic mixed styles example">
+                        <button type="button" class="btn btn-danger bg-play" id="btnPlay" @click="play"><i
+                                class="bi bi-play-circle-fill"></i></button>
+                        <button type="button" class="btn btn-secondary" id="btnMuteGeneral" @click="setMuteGeneral">
+                            <i class="bi bi-volume-up"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </template>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+
+</html>

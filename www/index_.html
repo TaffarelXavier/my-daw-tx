@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div id="app">
+        <template>
+            <div v-for="faixa in faixas" style="border:2px solid red">
+                <audio constrols autoplay :key="faixa.id" ref="audioPlayers" :src="faixa.src"
+                    @loadedmetadata="onAudioLoaded"></audio>
+            </div>
+            <input type="range" v-model="currentTime" v-bind:max="duration" @input="onTimeInput">
+            <button @click="setTime(10)">AA</button>
+            <button @click="setTime(100)">BB</button>
+            <button @click="setTime(200)">CC</button>
+        </template>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                faixas: [
+                    {
+                        id: 1,
+                        nome: "Baixo",
+                        src: "audio_example/audio_example-bass.mp3"
+                    },
+                    {
+                        id: 2,
+                        nome: "Bateria",
+                        src: "audio_example/audio_example-drums.mp3"
+                    },
+                    {
+                        id: 3,
+                        nome: "Outros",
+                        src: "audio_example/audio_example-other.mp3"
+                    },
+                    {
+                        id: 4,
+                        nome: "Vocais",
+                        src: "audio_example/audio_example-vocals.mp3"
+                    }
+                ],
+                audioPlayers: [],
+                duration: 0,
+                currentTime: 0
+            },
+            mounted() {
+                this.audioPlayers = this.$refs.audioPlayers;
+            },
+            methods: {
+                onAudioLoaded() {
+                    this.duration = Math.floor(this.audioPlayers[0].duration);
+                },
+                onTimeInput() {
+                    for (let i = 0; i < this.audioPlayers.length; i++) {
+                        const audio = this.audioPlayers[i];
+                        audio.currentTime = this.currentTime;
+                        if (audio.paused) {
+                            audio.play();
+                        }
+                    }
+                },
+                setTime(time) {
+                    var audioTags = document.getElementsByTagName("audio");
+                    var audioArray = Array.from(audioTags);
+                    audioArray.forEach(function (audio) {
+                        audio.currentTime = time;
+                    });
+                }
+            }
+        });
+
+    </script>
+</body>
+
+</html>

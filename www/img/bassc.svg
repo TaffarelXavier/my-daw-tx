@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg width="136.1mm" height="136.1mm" version="1.1" viewBox="0 0 136.1 136.1" xmlns="http://www.w3.org/2000/svg">
+ <g transform="translate(-36.335 -102.39)" fill="none" stroke-linecap="round">
+  <path d="m67.768 232.74-2.5023-4.1587s-1.0879-2.248 0.32638-6.1819c1.4143-3.9339 32.421-103.97 32.421-103.97s3.4241-8.5455 15.34-9.6662c8.3771-0.78784 13.926 5.8447 13.926 5.8447s9.2475 9.329 6.4188 18.995c-2.8286 9.6662-8.4859 13.6-8.4859 13.6s-4.6782 3.0347-3.2638 8.767c1.4143 5.7323 13.926 50.017 13.926 50.017s2.9374 10.116-3.699 15.848c-6.6364 5.7323-6.4188 8.8794-6.4188 8.8794"
+  stroke="#fff" stroke-width="11.416"/>
+  <g stroke="#fff" stroke-linejoin="round" stroke-width="5.1027">
+   <ellipse cx="92.737" cy="189.13" rx="4.2839" ry="4.3696"/>
+   <ellipse cx="100.84" cy="160.02" rx="4.2839" ry="4.3696"/>
+   <ellipse cx="110.2" cy="132.03" rx="4.2839" ry="4.3696"/>
+   <ellipse cx="83.217" cy="216.33" rx="4.2839" ry="4.3696"/>
+  </g>
+  <g stroke-linejoin="round" stroke-width="7.2027">
+   <ellipse cx="61.853" cy="205.26" rx="9.2753" ry="9.5263" stroke="#fff"/>
+   <ellipse cx="70.076" cy="178.58" rx="9.2753" ry="9.5263" stroke="#fff"/>
+   <ellipse cx="78.037" cy="151.19" rx="9.2753" ry="9.5263" stroke="#fff"/>
+   <ellipse cx="87.011" cy="125.27" rx="9.2753" ry="9.5263" stroke="#fff"/>
+  </g>
+ </g>
+</svg>
