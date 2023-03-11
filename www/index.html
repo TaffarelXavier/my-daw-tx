@@ -20,7 +20,10 @@
                 </div>
             </div>
             <div class="faixa">
-                <h4>Baixo</h4>
+                <img src="img/bassc.svg" class="icone" />
+                <strong>Baixo</strong>
+                <input type="range" @input="alterarVolume" class="input-range" id="1" min="0" max="1" step="0.01"
+                    value="1" />
                 <i class="bi bi-volume-up" id="muteButton1" @click="setMute" data-id="1"></i>
                 <audio constrols @timeupdate="updateTime" id="audio1" data-color="rgb(255,0,0)" data-id="1">
                     <source src="audio_example/audio_example-bass.mp3" type="audio/mp3">
@@ -29,7 +32,8 @@
                 <canvas id="canvas1"></canvas>
             </div>
             <div class="faixa">
-                <h4>Bateria</h4>
+                <img src="img/bassc.svg" class="icone" />
+                <strong>Bateria</strong>
                 <i class="bi bi-volume-up" id="muteButton2" @click="setMute" data-id="2"></i>
                 <audio constrols @timeupdate="updateTime" id="audio2" data-color="rgb(255,255,0)" data-id="2">
                     <source src="audio_example/audio_example-drums.mp3" type="audio/mp3">
@@ -38,7 +42,8 @@
                 <canvas id="canvas2"></canvas>
             </div>
             <div class="faixa">
-                <h4>Outros</h4>
+                <img src="img/bassc.svg" class="icone" />
+                <strong>Outros</strong>
                 <i class="bi bi-volume-up" id="muteButton3" @click="setMute" data-id="3"></i>
                 <audio constrols @timeupdate="updateTime" id="audio3" data-color="rgb(0,255,0)" data-id="3">
                     <source src="audio_example/audio_example-other.mp3" type="audio/mp3">
@@ -47,9 +52,10 @@
                 <canvas id="canvas3"></canvas>
             </div>
             <div class="faixa">
-                <h4>Vocais</h4>
+                <img src="img/bassc.svg" class="icone" />
+                <strong>Vocais</strong>
                 <i class="bi bi-volume-up" id="muteButton4" @click="setMute" data-id="4"></i>
-                <audio constrols @timeupdate="updateTime" id="audio4"  data-color="rgb(0,0,255)" data-id="4">
+                <audio constrols @timeupdate="updateTime" id="audio4" data-color="rgb(0,0,255)" data-id="4">
                     <source src="audio_example/audio_example-vocals.mp3" type="audio/mp3">
                     Seu navegador não suporta a tag de áudio.
                 </audio>
@@ -282,6 +288,17 @@
                 updateTime(ev) {
                     const $this = ev.target;
                     this.currentTime = $this.currentTime;
+                },
+                alterarVolume(ev) {
+                    const $this = ev.target;
+                    const vol = $this.value;
+                    const audio1 = document.getElementById("audio" + $this.id);
+                    audio1.volume = vol;
+                    this.faixas.find(function (faixa) {
+                        if (faixa.id == $this.id) {
+                            faixa.volume = vol;
+                        }
+                    });
                 },
             }
         });
