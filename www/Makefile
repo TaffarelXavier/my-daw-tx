@@ -4,4 +4,3 @@ merge:
 	git checkout main
 	git merge $(shell git rev-parse --abbrev-ref HEAD)
 	git push
-	git checkout $(shell git rev-parse --abbrev-ref HEAD)

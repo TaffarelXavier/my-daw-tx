@@ -56,12 +56,6 @@ var app = new Vue({
             const id = audio.dataset.id;
             const rgba = audio.dataset.color;
 
-            // audio.addEventListener('loadedmetadata', () => {
-            //     if (me.duration == 0) {
-            //         me.duration = Math.round(audio.duration);
-            //     }
-            // });
-
             // Obter referência para o elemento de áudio e o canvas
             const canvas = document.getElementById('canvas' + id);
             // // Configurar o contexto de áudio
