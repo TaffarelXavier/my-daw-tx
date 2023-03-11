@@ -22,7 +22,7 @@
             <div class="faixa">
                 <h4>Baixo</h4>
                 <i class="bi bi-volume-up" id="muteButton1" @click="setMute" data-id="1"></i>
-                <audio constrols @timeupdate="updateTime" id="audio1" data-color="rgba(255,0,0)" data-id="1">
+                <audio constrols @timeupdate="updateTime" id="audio1" data-color="rgb(255,0,0)" data-id="1">
                     <source src="audio_example/audio_example-bass.mp3" type="audio/mp3">
                     Seu navegador não suporta a tag de áudio.
                 </audio>
@@ -30,8 +30,8 @@
             </div>
             <div class="faixa">
                 <h4>Bateria</h4>
-                <i class="bi bi-volume-up" id="muteButton2" @click="setMute"  data-id="2"></i>
-                <audio constrols @timeupdate="updateTime" id="audio2" data-color="rgba(255,255,0)" data-id="2">
+                <i class="bi bi-volume-up" id="muteButton2" @click="setMute" data-id="2"></i>
+                <audio constrols @timeupdate="updateTime" id="audio2" data-color="rgb(255,255,0)" data-id="2">
                     <source src="audio_example/audio_example-drums.mp3" type="audio/mp3">
                     Seu navegador não suporta a tag de áudio.
                 </audio>
@@ -39,8 +39,8 @@
             </div>
             <div class="faixa">
                 <h4>Outros</h4>
-                <i class="bi bi-volume-up" id="muteButton3" @click="setMute"  data-id="3"></i>
-                <audio constrols @timeupdate="updateTime" id="audio3"  data-color="rgba(0,255,0)" data-id="3">
+                <i class="bi bi-volume-up" id="muteButton3" @click="setMute" data-id="3"></i>
+                <audio constrols @timeupdate="updateTime" id="audio3" data-color="rgb(0,255,0)" data-id="3">
                     <source src="audio_example/audio_example-other.mp3" type="audio/mp3">
                     Seu navegador não suporta a tag de áudio.
                 </audio>
@@ -48,8 +48,8 @@
             </div>
             <div class="faixa">
                 <h4>Vocais</h4>
-                <i class="bi bi-volume-up" id="muteButton4" data-id="4"></i>
-                <audio constrols @timeupdate="updateTime" data-color="rgba(0,0,255)" data-id="4">
+                <i class="bi bi-volume-up" id="muteButton4" @click="setMute" data-id="4"></i>
+                <audio constrols @timeupdate="updateTime" id="audio4"  data-color="rgb(0,0,255)" data-id="4">
                     <source src="audio_example/audio_example-vocals.mp3" type="audio/mp3">
                     Seu navegador não suporta a tag de áudio.
                 </audio>
@@ -192,6 +192,59 @@
                     });
 
                     me.duration = duration;
+
+
+                    var audioTags = document.getElementsByTagName("audio");
+                    var audioArray = Array.from(audioTags);
+
+                    audioArray.forEach(function (audio) {
+
+                        const id = audio.dataset.id;
+                        const rgba = audio.dataset.color;
+
+                        // Obter referência para o elemento de áudio e o canvas
+                        const canvas = document.getElementById('canvas' + id);
+                        // // Configurar o contexto de áudio
+                        const audioCtx = new AudioContext();
+                        const src = audioCtx.createMediaElementSource(audio);
+                        const analyser = audioCtx.createAnalyser();
+                        src.connect(analyser);
+                        analyser.connect(audioCtx.destination);
+
+                        // Definir configurações de visualização do espectro de áudio
+                        analyser.fftSize = 256;
+                        const bufferLength = analyser.frequencyBinCount;
+                        const dataArray = new Uint8Array(bufferLength);
+
+                        // Configurar o canvas
+                        const canvasCtx = canvas.getContext('2d');
+                        const WIDTH = canvas.width;
+                        const HEIGHT = canvas.height;
+
+                        // Desenhar as ondas sonoras no canvas
+                        function draw() {
+                            requestAnimationFrame(draw);
+
+                            analyser.getByteFrequencyData(dataArray);
+
+                            canvasCtx.fillStyle = 'rgb(0, 0, 0)';
+                            canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+
+                            const barWidth = (WIDTH / bufferLength) * 2.5;
+                            let barHeight;
+                            let x = 0;
+
+                            for (let i = 0; i < bufferLength; i++) {
+                                barHeight = dataArray[i];
+                                // (barHeight + 100) +
+                                canvasCtx.fillStyle = rgba;
+                                canvasCtx.fillRect(x, HEIGHT - barHeight / 2, barWidth, barHeight / 2);
+
+                                x += barWidth + 1;
+                            }
+                        }
+                        draw();
+                    });
                 },
                 setMuteGeneral() {
                     var audioTags = document.getElementsByTagName("audio");
