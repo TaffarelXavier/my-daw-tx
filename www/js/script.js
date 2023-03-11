@@ -158,7 +158,6 @@ var app = new Vue({
             audioArray.forEach(function (audio) {
                 audio.volume = vol;
             });
-
             this.faixas.forEach(function (faixa) {
                 faixa.volume = vol;
             })
