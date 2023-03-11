@@ -22,7 +22,7 @@
             <div class="faixa">
                 <img src="img/bassc.svg" class="icone" />
                 <strong>Baixo</strong>
-                <input type="range" @input="alterarVolume" class="input-range" id="1" min="0" max="1" step="0.01"
+                <input type="range" @input="alterarVolume" class="input-range w-100" id="1" min="0" max="1" step="0.01"
                     value="1" />
                 <i class="bi bi-volume-up" id="muteButton1" @click="setMute" data-id="1"></i>
                 <audio constrols @timeupdate="updateTime" id="audio1" data-color="rgb(255,0,0)" data-id="1">
