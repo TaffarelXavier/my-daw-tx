@@ -20,19 +20,31 @@
                         <h1>TXAudio Editor</h1>
                     </div>
                 </div>
-                <div class="faixa">
+                <div v-for="faixa in faixas" class="faixa">
+                    <img :src="faixa.icon" class="icone" />
+                    &nbsp;<strong>{{faixa.nome}}</strong>
+                    <input type="range" @input="alterarVolume" class="input-range w-100" :id="faixa.id" min="0" max="1"
+                        step="0.01" :value="faixa.volume" />
+                    <i class="bi bi-volume-up" style="font-size:2rem" :id="'muteButton' + faixa.id" @click="setMute" :data-id="faixa.id"></i>
+                    <audio constrols @timeupdate="updateTime" :id="'audio'+faixa.id" :data-color="faixa.color" :data-id="faixa.id">
+                        <source :src="folderName + faixa.src" type="audio/mp3">
+                        Seu navegador não suporta a tag de áudio.
+                    </audio>
+                    <canvas :id="'canvas' + faixa.id"></canvas>
+                </div>
+                <!-- <div class="faixa">
                     <img src="img/bassc.svg" class="icone" />
                     <strong>Baixo</strong>
                     <input type="range" @input="alterarVolume" class="input-range w-100" id="1" min="0" max="1"
                         step="0.01" value="1" />
                     <i class="bi bi-volume-up" style="font-size:2rem" id="muteButton1" @click="setMute" data-id="1"></i>
                     <audio constrols @timeupdate="updateTime" id="audio1" data-color="rgb(255,0,0)" data-id="1">
-                        <source src="audio_example/audio_example-bass.mp3" type="audio/mp3">
+                        <source src="audio_example/love.mp3" type="audio/mp3">
                         Seu navegador não suporta a tag de áudio.
                     </audio>
                     <canvas id="canvas1"></canvas>
-                </div>
-                <div class="faixa">
+                </div> -->
+                <!-- <div class="faixa">
                     <img src="img/drums.svg" class="icone" />&nbsp;
                     <strong>Bateria</strong>
                     <input type="range" @input="alterarVolume" class="input-range w-100" id="2" min="0" max="1"
@@ -67,7 +79,7 @@
                         Seu navegador não suporta a tag de áudio.
                     </audio>
                     <canvas id="canvas4"></canvas>
-                </div>
+                </div> -->
 
                 <div class="text-center w-100"
                     style="position:fixed; bottom:10px;left:0px;padding-left:10px;padding-right:10px;">

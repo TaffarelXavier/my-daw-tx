@@ -29,8 +29,8 @@
  }
 
  .faixa {
-     padding-top: 15px;
-     padding-bottom: 15px;
+     padding-top: 10px;
+     padding-bottom: 10px;
      display: flex;
      justify-content: space-evenly;
      align-items: center;
@@ -51,7 +51,7 @@
 
  .input-range {
      appearance: none !important;
-     background-color: #ddd !important;
+     background-color: red !important;
      border-radius: 5px !important;
      outline: none !important;
      appearance: none !important;
@@ -62,11 +62,24 @@
 
  .input-range::-webkit-slider-thumb {
      appearance: none !important;
-     width: 30px !important;
-     height: 30px !important;
-     background-color: rgb(63, 0, 0);
+     width:20px !important;
+     height: 20px !important;
+     background-color: lime;
+     outline:2px solid #fff;
+     border:7px solid #111;
      border-radius: 50% !important;
      cursor: pointer !important;
+ }
+ .input-range::before{
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 10px;
+        height: 10px;
+        background: #000;
+        border-radius: 50%;
+        z-index: 1;
  }
 
  .input-range::-moz-range-thumb {
@@ -83,9 +96,12 @@
  }
 
  .icone {
-     width: 30px;
-     height: 30px;
+     width:45px;
+     height:45px;
      float: left;
+     background: #222;
+     padding: 10px;
+     border-radius: 50%;
  }
 
  .bg-play {
