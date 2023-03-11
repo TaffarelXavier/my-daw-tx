@@ -19,26 +19,42 @@
                     <h1>My Daw TX</h1>
                 </div>
             </div>
-            <h4>Baixo</h4>
-            <audio @timeupdate="updateTime">
-                <source src="audio_example/audio_example-bass.mp3" type="audio/mp3">
-                Seu navegador não suporta a tag de áudio.
-            </audio>
-            <h4>Bateria</h4>
-            <audio @timeupdate="updateTime">
-                <source src="audio_example/audio_example-drums.mp3" type="audio/mp3">
-                Seu navegador não suporta a tag de áudio.
-            </audio>
-            <h4>Outros</h4>
-            <audio @timeupdate="updateTime">
-                <source src="audio_example/audio_example-other.mp3" type="audio/mp3">
-                Seu navegador não suporta a tag de áudio.
-            </audio>
-            <h4>Vocais</h4>
-            <audio @timeupdate="updateTime">
-                <source src="audio_example/audio_example-vocals.mp3" type="audio/mp3">
-                Seu navegador não suporta a tag de áudio.
-            </audio>
+            <div class="faixa">
+                <h4>Baixo</h4>
+                <i class="bi bi-volume-up" id="muteButton1" @click="setMute" data-id="1"></i>
+                <audio constrols @timeupdate="updateTime" id="audio1" data-color="rgba(255,0,0)" data-id="1">
+                    <source src="audio_example/audio_example-bass.mp3" type="audio/mp3">
+                    Seu navegador não suporta a tag de áudio.
+                </audio>
+                <canvas id="canvas1"></canvas>
+            </div>
+            <div class="faixa">
+                <h4>Bateria</h4>
+                <i class="bi bi-volume-up" id="muteButton2" @click="setMute"  data-id="2"></i>
+                <audio constrols @timeupdate="updateTime" id="audio2" data-color="rgba(255,255,0)" data-id="2">
+                    <source src="audio_example/audio_example-drums.mp3" type="audio/mp3">
+                    Seu navegador não suporta a tag de áudio.
+                </audio>
+                <canvas id="canvas2"></canvas>
+            </div>
+            <div class="faixa">
+                <h4>Outros</h4>
+                <i class="bi bi-volume-up" id="muteButton3" @click="setMute"  data-id="3"></i>
+                <audio constrols @timeupdate="updateTime" id="audio3"  data-color="rgba(0,255,0)" data-id="3">
+                    <source src="audio_example/audio_example-other.mp3" type="audio/mp3">
+                    Seu navegador não suporta a tag de áudio.
+                </audio>
+                <canvas id="canvas3"></canvas>
+            </div>
+            <div class="faixa">
+                <h4>Vocais</h4>
+                <i class="bi bi-volume-up" id="muteButton4" data-id="4"></i>
+                <audio constrols @timeupdate="updateTime" data-color="rgba(0,0,255)" data-id="4">
+                    <source src="audio_example/audio_example-vocals.mp3" type="audio/mp3">
+                    Seu navegador não suporta a tag de áudio.
+                </audio>
+                <canvas id="canvas4"></canvas>
+            </div>
 
             <!-- VOLUME GERAL -->
             <div style="margin-top: 50px;">
@@ -123,6 +139,18 @@
                         if (audio.paused) {
                             audio.play();
                         }
+                    }
+                },
+                setMute(ev) {
+                    const $this = ev.target;
+                    const faixaId = $this.dataset.id;
+                    console.log(faixaId);
+                    var audio = document.getElementById("audio" + faixaId);
+                    audio.muted = !audio.muted;
+                    if (audio.muted) {
+                        $('#muteButton' + faixaId).addClass('bi-volume-mute').removeClass('bi-volume-up');
+                    } else {
+                        $('#muteButton' + faixaId).addClass('bi-volume-up').removeClass('bi-volume-mute');
                     }
                 },
                 setTime(time) {

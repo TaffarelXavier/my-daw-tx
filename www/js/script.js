@@ -48,57 +48,57 @@ var app = new Vue({
 
         this.audioPlayers = this.$refs.audioPlayers;
 
-        var audioTags = document.getElementsByTagName("audio");
-        var audioArray = Array.from(audioTags);
+        // var audioTags = document.getElementsByTagName("audio");
+        // var audioArray = Array.from(audioTags);
 
-        audioArray.forEach(function (audio) {
+        // audioArray.forEach(function (audio) {
 
-            const id = audio.dataset.id;
-            const rgba = audio.dataset.color;
+        //     const id = audio.dataset.id;
+        //     const rgba = audio.dataset.color;
 
-            // Obter referência para o elemento de áudio e o canvas
-            const canvas = document.getElementById('canvas' + id);
-            // // Configurar o contexto de áudio
-            const audioCtx = new AudioContext();
-            const src = audioCtx.createMediaElementSource(audio);
-            const analyser = audioCtx.createAnalyser();
-            src.connect(analyser);
-            analyser.connect(audioCtx.destination);
+        //     // Obter referência para o elemento de áudio e o canvas
+        //     const canvas = document.getElementById('canvas' + id);
+        //     // // Configurar o contexto de áudio
+        //     const audioCtx = new AudioContext();
+        //     const src = audioCtx.createMediaElementSource(audio);
+        //     const analyser = audioCtx.createAnalyser();
+        //     src.connect(analyser);
+        //     analyser.connect(audioCtx.destination);
 
-            // Definir configurações de visualização do espectro de áudio
-            analyser.fftSize = 256;
-            const bufferLength = analyser.frequencyBinCount;
-            const dataArray = new Uint8Array(bufferLength);
+        //     // Definir configurações de visualização do espectro de áudio
+        //     analyser.fftSize = 256;
+        //     const bufferLength = analyser.frequencyBinCount;
+        //     const dataArray = new Uint8Array(bufferLength);
 
-            // Configurar o canvas
-            const canvasCtx = canvas.getContext('2d');
-            const WIDTH = canvas.width;
-            const HEIGHT = canvas.height;
+        //     // Configurar o canvas
+        //     const canvasCtx = canvas.getContext('2d');
+        //     const WIDTH = canvas.width;
+        //     const HEIGHT = canvas.height;
 
-            // Desenhar as ondas sonoras no canvas
-            function draw() {
-                requestAnimationFrame(draw);
+        //     // Desenhar as ondas sonoras no canvas
+        //     function draw() {
+        //         requestAnimationFrame(draw);
 
-                analyser.getByteFrequencyData(dataArray);
+        //         analyser.getByteFrequencyData(dataArray);
 
-                canvasCtx.fillStyle = 'rgb(0, 0, 0)';
-                canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+        //         canvasCtx.fillStyle = 'rgb(0, 0, 0)';
+        //         canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
 
-                const barWidth = (WIDTH / bufferLength) * 2.5;
-                let barHeight;
-                let x = 0;
+        //         const barWidth = (WIDTH / bufferLength) * 2.5;
+        //         let barHeight;
+        //         let x = 0;
 
-                for (let i = 0; i < bufferLength; i++) {
-                    barHeight = dataArray[i];
-                    // (barHeight + 100) +
-                    canvasCtx.fillStyle = rgba;
-                    canvasCtx.fillRect(x, HEIGHT - barHeight / 2, barWidth, barHeight / 2);
+        //         for (let i = 0; i < bufferLength; i++) {
+        //             barHeight = dataArray[i];
+        //             // (barHeight + 100) +
+        //             canvasCtx.fillStyle = rgba;
+        //             canvasCtx.fillRect(x, HEIGHT - barHeight / 2, barWidth, barHeight / 2);
 
-                    x += barWidth + 1;
-                }
-            }
-            draw();
-        });
+        //             x += barWidth + 1;
+        //         }
+        //     }
+        //     draw();
+        // });
     },
     methods: {
         formatCurrentTime(cTime) {
