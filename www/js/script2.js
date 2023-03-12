@@ -70,10 +70,10 @@ var app = new Vue({
 
         let items = [
             { id: 1, nome: "Vem me buscar", pasta: "vem_me_buscar" },
-            // { id: 2, nome: "Love", pasta: "love" },
-            // { id: 3, nome: "Morena", pasta: "morena" },
-            // { id: 4, nome: "Love Gostosinho", pasta: "love_gostosinho" },
-            // { id: 5, nome: "Leão", pasta: "leao" },
+            { id: 2, nome: "Love", pasta: "love" },
+            { id: 3, nome: "Morena", pasta: "morena" },
+            { id: 4, nome: "Love Gostosinho", pasta: "love_gostosinho" },
+            { id: 5, nome: "Leão", pasta: "leao" },
         ];
 
         let file = localStorage.getItem("itemSelecionado")
@@ -87,6 +87,7 @@ var app = new Vue({
         }
 
         this.files = items;
+
     },
     methods: {
         setFile(file) {
