@@ -16,19 +16,16 @@
     <body>
         <div class="container-fluid">
             <div id="app">
-                <div id="waveform"></div>
-                <button @click="backward">Voltar</button>
-                <button @click="playAll">Play</button>
-                <button @click="pauseAll">Pause</button>
-                <button @click="forward">Avançar</button>
-                <button @click="toggleMute">Mudo</button>
-                <button @click="stop">Stop</button>
-
                 <div v-for="(wave, index) in wavesurferes" :key="index">
                     <div ref="waveform" :id="'waveform-' + index"></div>
-                    <button @click="playWaveform(index)">Play</button>
-                    <button @click="pauseWaveform(index)">Pause</button>
+                    <button @click="setMute(index)">Mute</button>
                 </div>
+                <button @click="backwardAll">Voltar</button>
+                <button @click="playAll">Play</button>
+                <button @click="pauseAll">Pause</button>
+                <button @click="forwardAll">Avançar</button>
+                <button @click="toggleMuteAll">Mudo</button>
+                <button @click="stopAll">Stop</button>
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
@@ -36,7 +33,6 @@
             crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
         <script src="https://unpkg.com/wavesurfer.js"></script>
-        <!-- https://wavesurfer-js.org/example/angular-material/index.html -->
         <script>
 
             var app = new Vue({
@@ -49,72 +45,22 @@
                         { item: 'audios_examples/output/love_gostosinho/other.wav', wavesurfer: null },
                         { item: 'audios_examples/output/love_gostosinho/vocals.wav', wavesurfer: null }
                     ],
-                    waves: [] // adicionando um array vazio para armazenar os objetos do wavesurfer
+                    waves: []
                 },
                 mounted() {
-
-                    // this.wavesurferes.forEach((wave, index) => {
-                    //     const wavesurfer = WaveSurfer.create({
-                    //         container: `#waveform-${index}`,
-                    //         waveColor: 'violet',
-                    //         progressColor: 'purple',
-                    //         height: 100,
-                    //         responsive: true,
-                    //         normalize: true,
-                    //         audioRate: 1,
-                    //         backend: 'WebAudio'
-                    //     });
-                    //     wavesurfer.load(wave.item);
-                    //     this.waves.push(wavesurfer); // adicionando o objeto wavesurfer ao array
-                    // });
 
                     this.wavesurferes.forEach((wavesurferObj, index) => {
                         const wavesurfer = WaveSurfer.create({
                             container: `#waveform-${index}`,
                             waveColor: 'violet',
                             progressColor: 'purple',
-                            height: 100,
+                            height: 80,
                             responsive: true
                         });
                         wavesurfer.load(wavesurferObj.item);
                         wavesurferObj.wavesurfer = wavesurfer;
                     });
                 },
-                // mounted() {
-                //     const $this = this;
-
-                //     $this.wavesurfer = WaveSurfer.create({
-                //         container: '#waveform',
-                //         waveColor: 'violet',
-                //         progressColor: 'purple',
-                //         audioRate: 1,
-                //         normalize: true,
-                //         splitChannels: true,
-                //         backgroundColor: '#222'
-                //     });
-
-                //     // playAudio();
-                //     $this.wavesurfer.on('ready', function () {
-                //         // $this.wavesurfer.play();
-                //     });
-
-                //     $this.wavesurfer.on('play', function (...ev) {
-                //         console.log(ev);
-                //         // $this.wavesurfer.params.container.style.opacity = 0.9;
-                //     });
-                //     $this.wavesurfer.on('pause', function (...ev) {
-                //         console.log(ev);
-                //         // $this.wavesurfer.params.container.style.opacity = 0.9;
-                //     });
-                //     $this.wavesurfer.on('finish', function () {
-                //         console.log('Finalizado');
-                //     });
-
-                //     //
-                //     $this.wavesurfer.on('mute', function (isMuted, ...mais) {
-                //         console.log(isMuted, mais);
-                //     });
-                // },
                 methods: {
                     backward() {
                         this.wavesurfer.skipBackward(15);
@@ -135,12 +81,25 @@
                         this.wavesurfer.stop();
                     },
                     playWaveform(index) {
-                        console.log(index);
-                        this.wavesurferes[index].play();
+
                     },
-                    pauseWaveform(index) {
-                        console.log(index);
-                        this.wavesurferes[index];
+                    setMute(index) {
+                        this.wavesurferes[index].wavesurfer.toggleMute();
+                    },
+                    toggleMuteAll() {
+                        this.wavesurferes.forEach((wavesurferObj) => {
+                            wavesurferObj.wavesurfer.toggleMute();
+                        });
+                    },
+                    backwardAll() {
+                        this.wavesurferes.forEach((wavesurferObj) => {
+                            wavesurferObj.wavesurfer.skipBackward(1);
+                        });
+                    },
+                    forwardAll() {
+                        this.wavesurferes.forEach((wavesurferObj) => {
+                            wavesurferObj.wavesurfer.skipForward(1);
+                        });
                     },
                     stopAll() {
                         this.wavesurferes.forEach((wavesurferObj) => {
