@@ -1,7 +1,7 @@
  body {
      padding: 0px !important;
      margin: 0px !important;
-     background: #000;
+     background: #333;
      color: #fff;
      font-family: 'Roboto', sans-serif;
  }
@@ -29,6 +29,8 @@
  }
 
  .faixa {
+     padding-left: 10px;
+     /* padding-right: 10px; */
      padding-top: 10px;
      padding-bottom: 10px;
      display: flex;
@@ -62,15 +64,16 @@
 
  .input-range::-webkit-slider-thumb {
      appearance: none !important;
-     width:20px !important;
+     width: 20px !important;
      height: 20px !important;
      background-color: lime;
-     outline:2px solid #fff;
-     border:7px solid #111;
+     outline: 2px solid #fff;
+     border: 7px solid #111;
      border-radius: 50% !important;
      cursor: pointer !important;
  }
- .input-range::before{
+
+ /* .input-range::before{
         content: '';
         position: absolute;
         top: 0;
@@ -80,7 +83,7 @@
         background: #000;
         border-radius: 50%;
         z-index: 1;
- }
+ } */
 
  .input-range::-moz-range-thumb {
      appearance: none !important;
@@ -96,8 +99,8 @@
  }
 
  .icone {
-     width:45px;
-     height:45px;
+     width: 45px;
+     height: 45px;
      float: left;
      background: #222;
      padding: 10px;
@@ -109,3 +112,19 @@
      outline: 0 !important;
      bottom: 0 !important;
  }
+/*
+ .box {
+     position: relative;
+     animation: slideLeft 10s ease-in infinite;
+     z-index:-1000 !important;
+ }
+
+ @keyframes slideLeft {
+     from {
+         left: 110%;
+     }
+
+     to {
+         left: -100%;
+     }
+ } */

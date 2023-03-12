@@ -2,10 +2,12 @@ var app = new Vue({
     el: '#app',
     data: {
         volumeGeral: 0.5,
+        title: 'Vem me buscar',
         audioPlayers: [],
         duration: 0,
         currentTime: 0,
         folderName: 'audios_examples/output/vem_me_buscar/',
+        files: [],
         faixas: [
             {
                 id: 1,
@@ -14,7 +16,8 @@ var app = new Vue({
                 icon: "img/bassc.svg",
                 muted: true,
                 color: 'rgba(255, 0, 0, 1)',
-                volume: this.volumeGeral
+                volume: this.volumeGeral,
+                solo: true,
             },
             {
                 id: 2,
@@ -23,7 +26,8 @@ var app = new Vue({
                 icon: "img/drums.svg",
                 muted: true,
                 color: 'rgba(0, 255, 0, 1)',
-                volume: this.volumeGeral
+                volume: this.volumeGeral,
+                solo: true,
             },
             {
                 id: 3,
@@ -32,7 +36,8 @@ var app = new Vue({
                 icon: "img/synth.svg",
                 muted: true,
                 color: 'rgba(0, 0, 200, 1)',
-                volume: this.volumeGeral
+                volume: this.volumeGeral,
+                solo: true,
             },
             {
                 id: 4,
@@ -41,7 +46,8 @@ var app = new Vue({
                 icon: "img/micxx.svg",
                 muted: true,
                 color: 'rgba(255, 200, 0, 1)',
-                volume: this.volumeGeral
+                volume: this.volumeGeral,
+                solo: true,
             },
             {
                 id: 5,
@@ -50,7 +56,8 @@ var app = new Vue({
                 icon: "img/synth.svg",
                 muted: true,
                 color: 'rgba(0, 255, 255, 1)',
-                volume: this.volumeGeral
+                volume: this.volumeGeral,
+                solo: true,
             }
         ],
         audioPlayers: [],
@@ -60,15 +67,43 @@ var app = new Vue({
     },
     mounted() {
         this.audioPlayers = this.$refs.audioPlayers;
+
+        let items = [
+            { id: 1, nome: "Vem me buscar", pasta: "vem_me_buscar" },
+            // { id: 2, nome: "Love", pasta: "love" },
+            // { id: 3, nome: "Morena", pasta: "morena" },
+            // { id: 4, nome: "Love Gostosinho", pasta: "love_gostosinho" },
+            // { id: 5, nome: "Leão", pasta: "leao" },
+        ];
+
+        let file = localStorage.getItem("itemSelecionado")
+        if (file) {
+            file = JSON.parse(file);
+            this.folderName = 'audios_examples/output/' + file.pasta + '/';
+            this.title = file.nome;
+        } else {
+            this.folderName = 'audios_examples/output/vem_me_buscar/';
+            this.title = 'Vem me buscar';
+        }
+
+        this.files = items;
     },
     methods: {
+        setFile(file) {
+            if (localStorage.getItem("itemSelecionado")) {
+                localStorage.setItem("itemSelecionado", JSON.stringify(file));
+            } else {
+                localStorage.setItem("itemSelecionado", JSON.stringify(file));
+            }
+
+            window.location.reload();
+        },
         onAudioLoaded() {
             this.duration = Math.floor(this.audioPlayers[0].duration);
         },
         setMute(ev) {
             const $this = ev.target;
             const faixaId = $this.dataset.id;
-            console.log(faixaId);
             var audio = document.getElementById("audio" + faixaId);
             audio.muted = !audio.muted;
             if (audio.muted) {
@@ -76,6 +111,37 @@ var app = new Vue({
             } else {
                 $('#muteButton' + faixaId).addClass('bi-volume-up').removeClass('bi-volume-mute');
             }
+
+             this.faixas.map(faixa => {
+                if (faixa.id == faixaId) {
+                    faixa.solo = true;
+                }
+            });
+        },
+        setSolo(ev) {
+            const faixaId = ev.target.dataset.id;
+
+            var audioTags = document.getElementsByTagName("audio");
+
+            var audioArray = Array.from(audioTags);
+
+            audioArray.forEach(function (audio) {
+                if (audio.dataset.id != faixaId) {
+                    audio.muted = true;
+                }
+                else{
+                    audio.muted = false;
+                }
+            });
+
+            this.faixas.map(faixa => {
+                if (faixa.id == faixaId) {
+                    faixa.solo = true;
+                } else {
+                    faixa.solo = false;
+                }
+            });
+
         },
         setTime(time) {
             var audioTags = document.getElementsByTagName("audio");
@@ -206,9 +272,10 @@ var app = new Vue({
             });
         },
         updateTime(ev) {
-            this.currentTime = ev.target.currentTime;
+            const audio = document.getElementById("audio1");
+            this.currentTime = audio.currentTime
         },
-        alterarVolume(ev) {
+        setVolumeItem(ev) {
             const $this = ev.target;
             const vol = $this.value;
             const audio1 = document.getElementById("audio" + $this.id);
@@ -219,5 +286,19 @@ var app = new Vue({
                 }
             });
         },
+        skipBackward() {
+            var audioTags = document.getElementsByTagName("audio");
+            var audioArray = Array.from(audioTags);
+            audioArray.forEach(function (audio) {
+                audio.currentTime -= 5;
+            });
+        },
+        skipForward() {
+            var audioTags = document.getElementsByTagName("audio");
+            var audioArray = Array.from(audioTags);
+            audioArray.forEach(function (audio) {
+                audio.currentTime += 5;
+            });
+        }
     }
 });

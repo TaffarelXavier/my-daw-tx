@@ -14,103 +14,83 @@
 <body>
     <div class="container-fluid mt-4">
         <div id="app">
-            <template>
-                <div class="row">
-                    <div class="col-12 text-center">
-                        <h1>TXAudio Editor</h1>
-                    </div>
-                </div>
-                <div v-for="faixa in faixas" class="faixa">
-                    <img :src="faixa.icon" class="icone" />
-                    &nbsp;<strong>{{faixa.nome}}</strong>
-                    <input type="range" @input="alterarVolume" class="input-range w-100" :id="faixa.id" min="0" max="1"
-                        step="0.01" :value="faixa.volume" />
-                    <i class="bi bi-volume-up" style="font-size:2rem" :id="'muteButton' + faixa.id" @click="setMute" :data-id="faixa.id"></i>
-                    <audio constrols @timeupdate="updateTime" :id="'audio'+faixa.id" :data-color="faixa.color" :data-id="faixa.id">
-                        <source :src="folderName + faixa.src" type="audio/mp3">
-                        Seu navegador não suporta a tag de áudio.
-                    </audio>
-                    <canvas :id="'canvas' + faixa.id"></canvas>
-                </div>
-                <!-- <div class="faixa">
-                    <img src="img/bassc.svg" class="icone" />
-                    <strong>Baixo</strong>
-                    <input type="range" @input="alterarVolume" class="input-range w-100" id="1" min="0" max="1"
-                        step="0.01" value="1" />
-                    <i class="bi bi-volume-up" style="font-size:2rem" id="muteButton1" @click="setMute" data-id="1"></i>
-                    <audio constrols @timeupdate="updateTime" id="audio1" data-color="rgb(255,0,0)" data-id="1">
-                        <source src="audio_example/love.mp3" type="audio/mp3">
-                        Seu navegador não suporta a tag de áudio.
-                    </audio>
-                    <canvas id="canvas1"></canvas>
-                </div> -->
-                <!-- <div class="faixa">
-                    <img src="img/drums.svg" class="icone" />&nbsp;
-                    <strong>Bateria</strong>
-                    <input type="range" @input="alterarVolume" class="input-range w-100" id="2" min="0" max="1"
-                        step="0.01" value="1" />
-                    <i class="bi bi-volume-up" style="font-size:2rem" id="muteButton2" @click="setMute" data-id="2"></i>
-                    <audio constrols @timeupdate="updateTime" id="audio2" data-color="rgb(255,255,0)" data-id="2">
-                        <source src="audio_example/audio_example-drums.mp3" type="audio/mp3">
-                        Seu navegador não suporta a tag de áudio.
-                    </audio>
-                    <canvas id="canvas2"></canvas>
-                </div>
-                <div class="faixa">
-                    <img src="img/synth.svg" class="icone" />&nbsp;
-                    <strong>Outros</strong>
-                    <input type="range" @input="alterarVolume" class="input-range w-100" id="3" min="0" max="1"
-                        step="0.01" value="1" />
-                    <i class="bi bi-volume-up" style="font-size:2rem" id="muteButton3" @click="setMute" data-id="3"></i>
-                    <audio constrols @timeupdate="updateTime" id="audio3" data-color="rgb(0,255,0)" data-id="3">
-                        <source src="audio_example/audio_example-other.mp3" type="audio/mp3">
-                        Seu navegador não suporta a tag de áudio.
-                    </audio>
-                    <canvas id="canvas3"></canvas>
-                </div>
-                <div class="faixa">
-                    <img src="img/micxx.svg" class="icone" />&nbsp;
-                    <strong>Vocais</strong>
-                    <input type="range" @input="alterarVolume" class="input-range w-100" id="4" min="0" max="1"
-                        step="0.01" value="1" />
-                    <i class="bi bi-volume-up" style="font-size:2rem" id="muteButton4" @click="setMute" data-id="4"></i>
-                    <audio constrols @timeupdate="updateTime" id="audio4" data-color="rgb(0,0,255)" data-id="4">
-                        <source src="audio_example/audio_example-vocals.mp3" type="audio/mp3">
-                        Seu navegador não suporta a tag de áudio.
-                    </audio>
-                    <canvas id="canvas4"></canvas>
-                </div> -->
+            <!-- <template> -->
 
-                <div class="text-center w-100"
-                    style="position:fixed; bottom:10px;left:0px;padding-left:10px;padding-right:10px;">
-                    <div class="d-flex align-items-center mb-4">
-                        <i class="bi bi-volume-down" style="font-size:2rem"></i>
-                        <input type="range" @input="alterarVolumeGeral" class="w-100 input-range" v-model="volumeGeral"
-                            min="0" max="1" step="0.01" value="0.2" />
-                        <i class="bi bi-volume-up" style="font-size:2rem"></i>
-                    </div>
-
-                    <!-- TEMPO -->
-                    <div class="d-flex align-items-center">
-                        {{ formatCurrentTime(currentTime) }}<input type="range" min="0" :max="duration"
-                            @input="atualizarTempoGeral" v-model="currentTime"
-                            class="w-100 input-range">{{formatCurrentTime(Math.floor(duration))
-                        }}
-                    </div>
-
-                    <div class="btn-group btn-group-lg" role="group" aria-label="Basic mixed styles example">
-                        <i class="bi bi-play-circle-fill" style="font-size:3rem" id="btnPlay"
-                            @click="play"></i>&nbsp;&nbsp;&nbsp;
-                        <i class="bi bi-volume-up" style="font-size:3rem" id="btnMuteGeneral"
-                            @click="setMuteGeneral"></i>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+                <div class="container-fluid">
+                    <a class="navbar-brand box" href=""><strong>TXAudio</strong></a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav">
+                            <li class="nav-item" v-for="file in files" :key="file.id">
+                                <a class="nav-link" @click="setFile(file)">{{ file.nome }}</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-            </template>
+            </nav>
+
+            <br />
+            <br />
+            <div v-for="faixa in faixas" class="faixa">
+                <img :src="faixa.icon" class="icone" />
+                &nbsp;<strong>{{faixa.nome}}</strong>
+                <input type="range" @input="setVolumeItem" class="input-range w-100" :id="faixa.id" min="0" max="1"
+                    step="0.01" :value="faixa.volume" />
+                <!-- SOLO -->
+                <i :class="'bi ' + (faixa.solo == true ? 'bi-check-square' : 'bi-square')" style="font-size:1.5rem"
+                    :id="'btnSolo' + faixa.id" @click="setSolo" :data-id="faixa.id"></i> &nbsp;
+                <!-- MUDO -->
+                <i class="bi bi-volume-up" style="font-size:2rem" :id="'muteButton' + faixa.id" @click="setMute"
+                    :data-id="faixa.id"></i>
+                <audio constrols @timeupdate="updateTime" :id="'audio'+faixa.id" :data-color="faixa.color"
+                    :data-id="faixa.id">
+                    <source :src="folderName + faixa.src" type="audio/mp3">
+                    Seu navegador não suporta a tag de áudio.
+                </audio>
+                <canvas :id="'canvas' + faixa.id"></canvas>
+            </div>
+            <div class="text-end p-0" style="margin-top: 0px;position: relative;">
+                <span style="font-size:1rem;opacity: 0.5;"><i class="bi bi-music-note-list"></i><i>{{ title
+                        }}</i></span>
+            </div>
+            <div class="text-center w-100"
+                style="position:fixed; bottom:5px;left:0px;padding-left:10px;padding-right:10px;">
+                <div class="d-flex align-items-center mb-4">
+                    <i class="bi bi-volume-down" style="font-size:2rem"></i>
+                    <input type="range" @input="alterarVolumeGeral" class="w-100 input-range" v-model="volumeGeral"
+                        min="0" max="1" step="0.01" value="0.2" />
+                    <i class="bi bi-volume-up" style="font-size:2rem"></i>
+                </div>
+
+                <!-- TEMPO -->
+                <div class="d-flex align-items-center">
+                    {{ formatCurrentTime(currentTime) }}<input type="range" min="0" :max="duration"
+                        @input="atualizarTempoGeral" v-model="currentTime"
+                        class="w-100 input-range">{{formatCurrentTime(Math.floor(duration))
+                    }}
+                </div>
+
+                <div class="btn-group btn-group-lg d-flex align-items-center justify-content-center" role="group"
+                    aria-label="Basic mixed styles example">
+                    <i class="bi bi-skip-backward" @click="skipBackward"></i>&nbsp;&nbsp;&nbsp;
+                    <i class="bi bi-play-circle-fill" style="font-size:3rem" id="btnPlay"
+                        @click="play"></i>&nbsp;&nbsp;&nbsp;
+                    <i class="bi bi-volume-up" style="font-size:3rem" id="btnMuteGeneral"
+                        @click="setMuteGeneral"></i>&nbsp;&nbsp;
+                    <i class="bi bi-skip-forward" @click="skipForward"></i>
+                </div>
+            </div>
+            <!-- </template> -->
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/script2.js"></script>
 </body>
 
