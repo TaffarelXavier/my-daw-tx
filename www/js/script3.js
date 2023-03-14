@@ -10,6 +10,15 @@ var app = new Vue({
         files: [],
         wavesurfer: null,
         isLoaded: false,
+        repeatAB: {
+            start: 0,
+            end: 0,
+            isPlaying: false,
+            isLooping: false,
+            isRepeating: false,
+            isRepeatingAll: false,
+            isOpenedModalRepetAB: false,
+        },
         wavesurferes: [
             {
                 id: 1, instrument: 'Baixo', item: 'bass.wav', wavesurfer: null,
@@ -19,14 +28,14 @@ var app = new Vue({
                 id: 2, instrument: 'Bateria', item: 'drums.wav', wavesurfer: null,
                 color: 'purple', progressColor: 'gray', icon: "img/drums.svg", solo: true, muted: false,
             },
-            {
-                id: 3, instrument: 'Vocais', item: 'vocals.wav', wavesurfer: null,
-                color: 'yellow', progressColor: 'gray', icon: "img/synth.svg", solo: true, muted: false,
-            },
-            {
-                id: 4, instrument: 'Outros', item: 'other.wav', wavesurfer: null,
-                color: 'red', progressColor: 'gray', icon: "img/micxx.svg", solo: true, muted: false,
-            },
+            // {
+            //     id: 3, instrument: 'Vocais', item: 'vocals.wav', wavesurfer: null,
+            //     color: 'yellow', progressColor: 'gray', icon: "img/synth.svg", solo: true, muted: false,
+            // },
+            // {
+            //     id: 4, instrument: 'Outros', item: 'other.wav', wavesurfer: null,
+            //     color: 'red', progressColor: 'gray', icon: "img/micxx.svg", solo: true, muted: false,
+            // },
         ],
         waves: []
     },
@@ -68,6 +77,9 @@ var app = new Vue({
                 hideCursor: false,
                 cursorWidth: 1,
                 interact: false,
+                plugins: [
+                    WaveSurfer.regions.create()
+                ]
             });
 
             wavesurfer.load(me.folderName + wavesurferObj.item);
@@ -92,6 +104,22 @@ var app = new Vue({
         });
     },
     methods: {
+        loop() {
+            this.wavesurferes.forEach((wavesurferObj, index) => {
+                wavesurferObj.wavesurfer.clearRegions();
+                var myRegion = wavesurferObj.wavesurfer.addRegion({
+                    start: 0,
+                    end: this.duration,
+                    color: 'rgba(255, 0, 0, 0.1)',
+                    drag: false,
+                    resize: true
+                });
+                myRegion.playLoop();
+                myRegion.on('update', function () {
+                    myRegion.play();
+                })
+            })
+        },
         formatCurrentTime(cTime) {
             let minutes = Math.floor(cTime / 60);
             let seconds = Math.floor(cTime % 60);
@@ -155,6 +183,7 @@ var app = new Vue({
             this.wavesurferes.forEach((wavesurferObj) => {
                 wavesurferObj.wavesurfer.stop();
                 wavesurferObj.wavesurfer.seekTo(0);
+                wavesurferObj.wavesurfer.clearRegions();
             });
             this.currentTime = 0;
             $('#range').val(0);
@@ -181,6 +210,7 @@ var app = new Vue({
         atualizarTempoGeral(ev) {
             const $slider = ev.target;
             const position = $slider.value / 100;
+            this.currentTime = position * this.duration;
             this.wavesurferes.forEach((wavesurferObj) => {
                 wavesurferObj.wavesurfer.seekTo(position);
             });
@@ -197,7 +227,10 @@ var app = new Vue({
         setVolumeItem(ev) {
             const $this = ev.target;
             const vol = $this.value;
+            const myId = $this.dataset.id;
             this.wavesurferes[$this.id].wavesurfer.setVolume(vol);
+            this.wavesurferes[$this.id].wavesurfer.setMute(false);
+           $('#muteButton' + myId).addClass('bi-volume-up').removeClass('bi-volume-mute');
         },
         setMute(index) {
             this.wavesurferes[index].wavesurfer.toggleMute();
@@ -223,6 +256,28 @@ var app = new Vue({
                     wavesurferObj.muted = true;
                     wavesurferObj.wavesurfer.setMute(true);
                 }
+            });
+        },
+        abrirModalRepetirAB() {
+            this.repeatAB.isOpenedModalRepetAB = !this.repeatAB.isOpenedModalRepetAB;
+        },
+        setRepeatA() {
+            this.repeatAB.start = this.currentTime;
+        },
+        setRepeatB() {
+            const me = this;
+
+            me.repeatAB.end = me.currentTime;
+
+            me.wavesurferes.forEach((wavesurferObj, index) => {
+                var myRegion = wavesurferObj.wavesurfer.addRegion({
+                    start: me.repeatAB.start,
+                    end:  me.repeatAB.end,
+                    color: 'rgba(255, 0, 0, 0.1)',
+                    drag: true,
+                    resize: true
+                });
+                myRegion.playLoop();
             });
         }
     }
