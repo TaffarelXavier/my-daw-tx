@@ -14,222 +14,102 @@
 <body>
     <div class="container-fluid">
         <div id="app">
+            <template>
+                <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+                    <div class="container-fluid">
+                        <a class="navbar-brand box" href=""><strong>TXAudio</strong></a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                            aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav">
+                                <li class="nav-item" v-for="file in files" :key="file.id">
+                                    <a class="nav-link" @click="setFile(file)">{{ file.nome }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
 
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-                <div class="container-fluid">
-                    <a class="navbar-brand box" href=""><strong>TXAudio</strong></a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav">
-                            <li class="nav-item" v-for="file in files" :key="file.id">
-                                <!-- <a class="nav-link" @click="setFile(file)">{{ file.nome }}</a> -->
-                            </li>
-                        </ul>
+                <br />
+                <br />
+                <br />
+
+                <div v-for="(wave, index) in wavesurferes" :key="index"
+                    style="border-bottom:0.1pt solid rgba(0, 255, 0, 0.39)">
+                    <div class="row">
+                        <div class="col-2 d-flex align-items-center">
+                            <img :src="wave.icon" class="icone" />
+                        </div>
+                        <div class="col-10">
+                            <div class="row">
+                                <div class="col-5 pt-2"><strong>{{ wave.instrument }}</strong></div>
+                                <div class="col-7 d-flex align-items-center">
+                                    <input type="range" @input="setVolumeItem" class="input-range w-100" :id="index"
+                                        min="0" max="1" step="0.01" /> &nbsp;&nbsp;
+                                    <!-- SOLO -->
+                                    <i :class="'bi ' + (wave.solo ? 'bi-check-square' : 'bi-square')"
+                                        style="font-size:1.2rem;position:relative;top:1.9px;" :id="'btnSolo' + index" @click="setSolo"
+                                        :data-id="index"></i> &nbsp;
+                                    <!-- MUTE -->
+                                    <i :class="'bi ' + (!wave.muted ? ' bi-volume-up' : 'bi-volume-mute')" style="font-size:1.5rem;position:relative;top:1px;"
+                                        :id="'muteButton' + wave.id" @click="setMute(index)" :data-id="wave.id"></i>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div ref="waveform" :id="'waveform-' + index"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="text-end p-0" style="margin-top: 0px;position: relative;">
+                    <span style="font-size:1rem;opacity: 0.5;"><i
+                            class="bi bi-music-note-list"></i><i>{{title}}</i></span>
+                </div>
+
+                <div class="text-center w-100" v-if="isLoaded"
+                    style="position:fixed; bottom:0px;left:0px;padding-left:10px;padding-right:10px;">
+
+                    <!-- VOLUME GERAL -->
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="bi bi-volume-down" style="font-size:2rem"></i>
+                        <input type="range" @input="setVolumeAll" class="w-100 input-range" v-model="volumeGeral"
+                            min="0" max="1" step="0.01" value="0.2" />
+                        <i class="bi bi-volume-up" @click="setMuteAll" id="btnMuteGeneral" style="font-size:2rem"></i>
+                    </div>
+
+                    <!-- TEMPO -->
+                    <div class="d-flex align-items-center">
+                        {{ formatCurrentTime(currentTime) }}&nbsp;
+                        <input type="range" id="range" value="0" min="0" max="100" step="0.1"
+                            @input="atualizarTempoGeral"
+                            class="w-100 input-range">&nbsp;{{formatCurrentTime(Math.floor(duration))
+                        }}
+                    </div>
+
+                    <div class="btn-group btn-group-lg d-flex align-items-center justify-content-center" role="group"
+                        aria-label="Basic mixed styles example">
+                        <i class="bi bi-skip-backward" @click="backwardAll"></i>&nbsp;&nbsp;&nbsp;
+                        <i class="bi bi-play-circle-fill" style="font-size:3rem" id="btnPlay"
+                            @click="playAll"></i>&nbsp;&nbsp;&nbsp;
+                        <i class="bi bi-stop-circle-fill" style="font-size:3rem" @click="stopAll"></i>&nbsp;&nbsp;&nbsp;
+                        <i class="bi bi-skip-forward" @click="forwardAll"></i>
                     </div>
                 </div>
-            </nav>
-
-            <br />
-            <br />
-            <br />
-
-            <div v-for="(wave, index) in wavesurferes" :key="index">
-                <strong>{{ wave.instrument }}</strong>
-                <div class="row">
-                    <div class="col-10">
-                        <div ref="waveform" :id="'waveform-' + index"></div>
-                    </div>
-                    <div class="col-2 d-flex border align-items-center">
-                        <i class="bi bi-volume-up" style="font-size:1.5rem" :id="'muteButton' + wave.id"
-                            @click="setMute(index)" :data-id="wave.id"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-center w-100"
-                style="position:fixed; bottom:5px;left:0px;padding-left:10px;padding-right:10px;">
-                <div class="d-flex align-items-center mb-4">
-                    <i class="bi bi-volume-down" style="font-size:2rem"></i>
-                    <input type="range" @input="setVolumeAll" class="w-100 input-range" v-model="volumeGeral" min="0"
-                        max="1" step="0.01" value="0.2" />
-                    <i class="bi bi-volume-up" @click="setMuteAll" id="btnMuteGeneral" style="font-size:2rem"></i>
-                </div>
-
-                <!-- TEMPO -->
-                <div class="d-flex align-items-center">
-                    {{ formatCurrentTime(currentTime) }}<input type="range" min="0" :max="duration"
-                        @input="atualizarTempoGeral" v-model="currentTime"
-                        class="w-100 input-range">{{formatCurrentTime(Math.floor(duration))
-                    }}
-                </div>
-
-                <div class="btn-group btn-group-lg d-flex align-items-center justify-content-center" role="group"
-                    aria-label="Basic mixed styles example">
-                    <i class="bi bi-skip-backward" @click="backwardAll"></i>&nbsp;&nbsp;&nbsp;
-                    <i class="bi bi-play-circle-fill" style="font-size:3rem" id="btnPlay"
-                        @click="playAll"></i>&nbsp;&nbsp;&nbsp;
-                    <i class="bi bi-stop-circle-fill" style="font-size:3rem" @click="stopAll"></i>&nbsp;&nbsp;&nbsp;
-                    <i class="bi bi-skip-forward" @click="forwardAll"></i>
-                </div>
-            </div>
-            <!-- <button @click="pauseAll">Pause</button> -->
-            <!-- <button @click="toggleMuteAll">Mudo</button> -->
+            </template>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/wavesurfer.js"></script>
-    <script>
-
-        var app = new Vue({
-            el: '#app',
-            data: {
-                volumeGeral: 0.7,
-                title: 'Vem me buscar',
-                audioPlayers: [],
-                duration: 0,
-                currentTime: 0,
-                folderName: 'audios_examples/output/vem_me_buscar/',
-                files: [],
-                wavesurfer: null,
-                wavesurferes: [
-                    { id: 1, instrument: 'Baixo', item: 'audios_examples/output/love_gostosinho/bass.wav', wavesurfer: null },
-                    { id: 2, instrument: 'Bateria', item: 'audios_examples/output/love_gostosinho/drums.wav', wavesurfer: null },
-                    { id: 3, instrument: 'Vocais', item: 'audios_examples/output/love_gostosinho/vocals.wav', wavesurfer: null },
-                    { id: 4, instrument: 'Outros', item: 'audios_examples/output/love_gostosinho/other.wav', wavesurfer: null },
-                ],
-                waves: []
-            },
-            mounted() {
-
-                this.wavesurferes.forEach((wavesurferObj, index) => {
-                    const wavesurfer = WaveSurfer.create({
-                        container: `#waveform-${index}`,
-                        waveColor: 'violet',
-                        progressColor: 'purple',
-                        height: 80,
-                        responsive: true
-                    });
-                    wavesurfer.load(wavesurferObj.item);
-                    wavesurferObj.wavesurfer = wavesurfer;
-                });
-            },
-            methods: {
-                formatCurrentTime(cTime) {
-                    let minutes = Math.floor(cTime / 60);
-                    let seconds = Math.floor(cTime % 60);
-                    minutes = (minutes >= 10) ? minutes : "0" + minutes;
-                    seconds = (seconds >= 10) ? seconds : "0" + seconds;
-                    return minutes + ":" + seconds;
-                },
-                backward() {
-                    this.wavesurfer.skipBackward(15);
-                },
-                play() {
-                    this.wavesurfer.play();
-                },
-                pause() {
-                    this.wavesurfer.pause();
-                },
-                forward() {
-                    this.wavesurfer.skipForward(15);
-                },
-                toggleMute() {
-                    this.wavesurfer.toggleMute();
-                },
-                stop() {
-                    this.wavesurfer.stop();
-                },
-                playWaveform(index) {
-
-                },
-                setVolumeAll(ev) {
-                    const $this = ev.target;
-                    const vol = $this.value;
-                    this.wavesurferes.forEach((wavesurferObj) => {
-                        wavesurferObj.wavesurfer.setVolume(vol);
-                    });
-                },
-                setMute(index) {
-                    this.wavesurferes[index].wavesurfer.toggleMute();
-
-                    if (this.wavesurferes[index].wavesurfer.getMute()) {
-                        $('#muteButton' + (index + 1)).addClass('bi-volume-mute').removeClass('bi-volume-up');
-                    } else {
-                        $('#muteButton' + (index + 1)).addClass('bi-volume-up').removeClass('bi-volume-mute');
-                    }
-
-                },
-                setMuteAll() {
-                    let isMuted = false;
-                    this.wavesurferes.forEach((wavesurferObj) => {
-                        isMuted = wavesurferObj.wavesurfer.getMute();
-                        wavesurferObj.wavesurfer.toggleMute();
-                    });
-
-                    if (!isMuted) {
-                        $('#btnMuteGeneral')
-                            .addClass('bi-volume-mute').removeClass('bi-volume-up');
-                    } else {
-                        $('#btnMuteGeneral')
-                            .addClass('bi-volume-up').removeClass('bi-volume-mute');
-                    }
-                },
-                toggleMuteAll() {
-                    this.wavesurferes.forEach((wavesurferObj) => {
-                        wavesurferObj.wavesurfer.toggleMute();
-                    });
-                },
-                backwardAll() {
-                    this.wavesurferes.forEach((wavesurferObj) => {
-                        wavesurferObj.wavesurfer.skipBackward(1);
-                    });
-                },
-                forwardAll() {
-                    this.wavesurferes.forEach((wavesurferObj) => {
-                        wavesurferObj.wavesurfer.skipForward(1);
-                    });
-                },
-                stopAll() {
-                    this.wavesurferes.forEach((wavesurferObj) => {
-                        wavesurferObj.wavesurfer.stop();
-                    });
-                    $('#btnPlay').addClass('bi-play-circle-fill').removeClass('bi-pause-circle-fill');
-                },
-                pauseAll() {
-                    this.wavesurferes.forEach((wavesurferObj) => {
-                        wavesurferObj.wavesurfer.pause();
-                    });
-                },
-                playAll() {
-                    let isPlaying = false;
-                    this.wavesurferes.forEach((wavesurferObj) => {
-                        isPlaying = wavesurferObj.wavesurfer.isPlaying();
-                        wavesurferObj.wavesurfer.playPause();
-                    });
-                    if (isPlaying) {
-                        $('#btnPlay').addClass('bi-play-circle-fill').removeClass('bi-pause-circle-fill');
-                    }
-                    else {
-                        $('#btnPlay').addClass('bi-pause-circle-fill').removeClass('bi-play-circle-fill');
-                    }
-                },
-                atualizarTempoGeral(){
-                    let tempoGeral = 0;
-                    this.wavesurferes.forEach((wavesurferObj) => {
-                        tempoGeral = wavesurferObj.wavesurfer.getCurrentTime();
-                    });
-                    this.currentTime = tempoGeral;
-                }
-            }
-        })
-    </script>
+    <script src="js/script3.js"></script>
 </body>
 
 </html>

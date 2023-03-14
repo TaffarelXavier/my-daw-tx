@@ -11,3 +11,20 @@ https://wavesurfer-js.org/example/bars/index.html
 
 ROCK AND BLUES GUITAR LESSONS GLASGOW WEST END
 https://www.truetoneguitar.co.uk/tools/music-speed-changer
+
+//     $this.wavesurfer.on('play', function (...ev) {
+                    //         console.log(ev);
+                    //         // $this.wavesurfer.params.container.style.opacity = 0.9;
+                    //     });
+                    //     $this.wavesurfer.on('pause', function (...ev) {
+                    //         console.log(ev);
+                    //         // $this.wavesurfer.params.container.style.opacity = 0.9;
+                    //     });
+                    //     $this.wavesurfer.on('finish', function () {
+                    //         console.log('Finalizado');
+                    //     });
+
+                    //     //
+                    //     $this.wavesurfer.on('mute', function (isMuted, ...mais) {
+                    //         console.log(isMuted, mais);
+                    //     });
